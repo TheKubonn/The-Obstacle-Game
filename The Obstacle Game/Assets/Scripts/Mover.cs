@@ -1,22 +1,50 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Mover : MonoBehaviour
 {
-    private float xValue = 0f;
-    private float yValue = 0.01f;
-    private float zValue = 0f;
-    
+    [SerializeField] private float moveSpeed = 5f;
+
+    Rigidbody rigidBody;
+    float xInput;
+    float zInput;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        rigidBody = GetComponent<Rigidbody>();
+        PrintInstruction();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        transform.Translate(xValue,yValue,zValue);
+        PlayerInput();
     }
+
+    private void MovePlayer()
+    {
+        Vector3 velocity = new Vector3(xInput, 0f, zInput) * moveSpeed * Time.deltaTime;
+        rigidBody.velocity = velocity;
+    }
+
+    private void PlayerInput()
+    {
+        xInput = Input.GetAxis("Horizontal");
+        zInput = Input.GetAxis("Vertical");
+    }
+
+    private void FixedUpdate()
+    {
+        MovePlayer();
+    }
+
+    private void PrintInstruction()
+    {
+        Debug.Log("Welcome to the game");
+        Debug.Log("Move your player using WASD or arrow keys");
+        Debug.Log("Don't hit the walls");
+    }
+
 }
